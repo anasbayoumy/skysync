@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import connect.Database;
+import controller.employee_controller;
 import controller.passenger_controller;
 
 public class main {
@@ -21,10 +22,21 @@ public class main {
 			System.out.println("2.Find passenger id by name");
 			System.out.println("3.Edit passenger");
 			System.out.println("4.View all passengers data");
-			System.out.println("5.Exit");
+			System.out.println("5.Delete Passenger");
+			System.out.println("");
+			System.out.println("6.Add employee");
+			System.out.println("7.Fidn employee id by name");
+			System.out.println("8.Edit employee");
+			System.out.println("9.View all employees data");
+			System.out.println("10.Fire employee");
+			
+			System.out.println("26.Exit");
 			
 			i = s.nextInt();
 			switch (i) {
+			
+			//For Passengers
+			
 			case 1:
 				passenger_controller.newPassenger(database, s);
 				break;
@@ -37,12 +49,35 @@ public class main {
 			case 4:
 				passenger_controller.getAllPassengers(database);
 				break;
+			case 5:
+				passenger_controller.deletePassenger(database , s);
+				break;
+				
+				//For Employee
+				
+			case 6:
+				employee_controller.newEmployee(database, s);
+				break;
+			case 7:
+				employee_controller.getEmployeeN(database, s);
+				break;
+			case 8:
+				employee_controller.editEmployee(database, s);
+				break;
+			case 9:
+				employee_controller.getAllEmployees(database);
+				break;
+			case 10:
+				employee_controller.fireEmployee(database, s);
+				break;
+				
+				
 			}
 			
-				
 			
 			
-		}while(i!=5);
+			
+		}while(i!=26);
 	}
 
 }
