@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import skysync.core.employee;
 import skysync.core.passenger;
+import skysync.core.plane;
 
 public class functions {
     private Statement stmt;
@@ -272,4 +273,140 @@ public class functions {
         }
     }
     
+    //END OF THE EMPLOYEES METHODDSSS FOR DB
+    //END OF THE EMPLOYEES METHODDSSS FOR DB
+    //END OF THE EMPLOYEES METHODDSSS FOR DB
+    //END OF THE EMPLOYEES METHODDSSS FOR DB
+    
+    //==================================================================================================
+    
+    //PLANE METHODSSSS FOR DB
+    //PLANE METHODSSSS FOR DB
+    //PLANE METHODSSSS FOR DB
+    
+    
+    public ArrayList<plane> getAllDataPl() throws SQLException {
+        String get = "SELECT * FROM `plane`";
+        ResultSet result = stmt.executeQuery(get);
+        ArrayList<plane> plane = new ArrayList<>();
+
+        while (result.next()) {
+            plane pl = new plane();
+            // Set the ID and other fields
+            pl.setModel(result.getString("model"));
+            pl.setFclass(result.getString("Fclass"));
+            pl.setPremium(result.getString("premium"));
+            pl.setEconomy(result.getString("economy"));
+            //===========================
+            plane.add(pl);
+            //===========================
+        }
+
+        return plane; 
+    }
+    
+    public void addPlane(plane newPlane) throws SQLException {
+        // Retrieve all passengers
+        ArrayList<plane> existingPlane = getAllDataPl();
+        //elmfroood n tcheck en mfeesh tayara bnfs l eh baa m3rfsh
+        
+
+       
+        String insert = "INSERT INTO `plane`(`model`, `Fclass`, `premium`, `economy`) VALUES ('"+newPlane.getModel()+"','"+newPlane.getFclass()+"','"+newPlane.getPremium()+"','"+newPlane.getEconomy()+"')";
+        stmt.execute(insert);
+        System.out.println("Plane added successfully.");
+    
+    }
+    public plane getPlane(int id ) throws SQLException {
+    	String get = "SELECT `id`, `model`, `Fclass`, `premium`, `economy` FROM `plane` WHERE`id`= "+id+"";
+        ResultSet result = stmt.executeQuery(get);
+        plane pl = new plane();
+        result.next();
+        // Set the ID and other fields
+        pl.setId(result.getInt("id"));
+        pl.setModel(result.getString("model"));
+        pl.setFclass(result.getString("Fclass"));
+        pl.setPremium(result.getString("premium"));
+        pl.setEconomy(result.getString("economy"));
+        
+		return pl; 
+    	
+    	
+    }
+    
+    public List<plane> getPlaneM(String model) throws SQLException {
+        // SQL query to fetch planes by model using a parameterized query
+        String get = "SELECT `id`, `model`, `Fclass`, `premium`, `economy` FROM `plane` WHERE `model` = ?";
+        
+        // Create the prepared statement to avoid SQL injection
+        PreparedStatement pstmt = stmt.getConnection().prepareStatement(get);
+        
+        // Set the parameter value (the model)
+        pstmt.setString(1, model);  
+        
+        // Execute the query and get the result set
+        ResultSet result = pstmt.executeQuery();
+        
+        // List to hold all the planes that match the given model
+        List<plane> planesList = new ArrayList<>();
+        
+        // Iterate through the results and add each plane to the list
+        while (result.next()) {
+            plane pl = new plane();
+            pl.setId(result.getInt("id"));
+            pl.setModel(result.getString("model"));
+            pl.setFclass(result.getString("Fclass"));
+            pl.setPremium(result.getString("premium"));
+            pl.setEconomy(result.getString("economy"));
+            planesList.add(pl);
+        }
+        
+        // Close the result set and prepared statement to avoid resource leaks
+        result.close();
+        pstmt.close();
+        
+        // Return the list of planes
+        return planesList;
+    }
+
+        
+    public void editPlane(plane pl) throws SQLException {
+        String check = "SELECT * FROM `plane` WHERE `id` = " + pl.getId();
+        ResultSet result = stmt.executeQuery(check);
+        
+        if (result.next()) {
+            // Employee exists, proceed with the update
+            String update = "UPDATE `plane` SET `model` = '" + pl.getModel() + 
+                            "', `Fclass` = '" + pl.getFclass() + 
+                            "', `premium` = '" + pl.getPremium() + 
+                            "', `economy` = '" + pl.getEconomy() + 
+                            "' WHERE `id` = " + pl.getId();
+            stmt.executeUpdate(update);
+            System.out.println("+==========++++++====");
+            System.out.println("Plane data edited successfully!!");
+            System.out.println("+==========++++++====+");
+        } else {
+            // No employee found with the provided ID
+            System.out.println("No Plane found with the provided ID.");
+        }
+
+        // Close the ResultSet to avoid resource leaks
+        result.close();
+    }
+    
+    public void deletePlane(int id) throws SQLException {
+    	String check = "SELECT * FROM `plane` WHERE `id` = "+id+"";
+    	ResultSet result = stmt.executeQuery(check);
+        
+        if (result.next()) {
+            // If the passenger exists, proceed to delete
+            String delete = "DELETE FROM `plane` WHERE `id` = ?";
+            PreparedStatement deleteStmt = stmt.getConnection().prepareStatement(delete);
+            deleteStmt.setInt(1, id);
+            deleteStmt.executeUpdate();
+            System.out.println("Plane deleted successfully.");
+        } else {
+            System.out.println("No Plane found with the provided ID.");
+        }
+    }
 }
